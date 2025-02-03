@@ -4,23 +4,30 @@ let audioElement = new Audio();
 let usageAudioElement = new Audio();
 
 async function loadDictionary() {
-    // Check if the dictionary is stored locally
     const storedData = localStorage.getItem("dictionary");
     if (storedData) {
         dictionary = JSON.parse(storedData);
+        console.log("Loaded dictionary from localStorage");
     } else {
-        // If not, fetch the dictionary from the GitHub URL
-        await fetch("https://kikyil.github.io/Ngas/dictionary.json")
-            .then(response => response.json())
-            .then(data => {
-                dictionary = data;
-                localStorage.setItem("dictionary", JSON.stringify(data)); // Save to localStorage
-                console.log("Dictionary loaded:", dictionary); // Debugging line
-            })
-            .catch(error => console.error("Error loading dictionary:", error));
+        try {
+            // Fetch dictionary from GitHub
+            const response = await fetch("https://kikyil.github.io/Ngas/dictionary.json");
+            console.log("Fetch response:", response);  // Debugging the fetch response
+            
+            if (!response.ok) {
+                throw new Error("Failed to fetch dictionary: " + response.statusText);
+            }
+
+            const data = await response.json();
+            console.log("Fetched JSON data:", data);  // Debugging the JSON data
+
+            dictionary = data;
+            localStorage.setItem("dictionary", JSON.stringify(data));  // Store data in localStorage
+        } catch (error) {
+            console.error("Error loading dictionary:", error);
+        }
     }
 
-    // Once the dictionary is loaded, initialize search and suggestions
     displayFavorites();
     showSuggestions();
 }
@@ -132,16 +139,14 @@ function showSuggestions() {
     }
 }
 
-// Listen for input events and trigger search and suggestions
 searchBox.addEventListener("input", () => {
     searchWord();
     showSuggestions();
 });
 
-// Example button functionality (just for illustration)
 document.getElementById("homeBtn").addEventListener("click", () => alert("Home clicked!"));
 document.getElementById("favoritesBtn").addEventListener("click", () => alert("Favorites clicked!"));
 document.getElementById("contactBtn").addEventListener("click", () => alert("Contact clicked!"));
 
-// Load the dictionary and initialize the UI
 loadDictionary();
+displayFavorites();
