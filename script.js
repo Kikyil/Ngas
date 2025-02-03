@@ -4,18 +4,25 @@ let audioElement = new Audio();
 let usageAudioElement = new Audio();
 
 async function loadDictionary() {
+    // Check if the dictionary is stored locally
     const storedData = localStorage.getItem("dictionary");
     if (storedData) {
         dictionary = JSON.parse(storedData);
     } else {
-        fetch("https://kikyil.github.io/Ngas/dictionary.json") // Use the URL of your external JSON file
+        // If not, fetch the dictionary from the GitHub URL
+        await fetch("https://kikyil.github.io/Ngas/dictionary.json")
             .then(response => response.json())
             .then(data => {
                 dictionary = data;
-                localStorage.setItem("dictionary", JSON.stringify(data));
+                localStorage.setItem("dictionary", JSON.stringify(data)); // Save to localStorage
+                console.log("Dictionary loaded:", dictionary); // Debugging line
             })
             .catch(error => console.error("Error loading dictionary:", error));
     }
+
+    // Once the dictionary is loaded, initialize search and suggestions
+    displayFavorites();
+    showSuggestions();
 }
 
 const searchBox = document.getElementById("searchBox");
@@ -125,14 +132,16 @@ function showSuggestions() {
     }
 }
 
+// Listen for input events and trigger search and suggestions
 searchBox.addEventListener("input", () => {
     searchWord();
     showSuggestions();
 });
 
+// Example button functionality (just for illustration)
 document.getElementById("homeBtn").addEventListener("click", () => alert("Home clicked!"));
 document.getElementById("favoritesBtn").addEventListener("click", () => alert("Favorites clicked!"));
 document.getElementById("contactBtn").addEventListener("click", () => alert("Contact clicked!"));
 
-loadDictionary(); // Load the dictionary data
-displayFavorites(); // Display the list of favorites on page load
+// Load the dictionary and initialize the UI
+loadDictionary();
