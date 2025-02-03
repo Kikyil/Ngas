@@ -1,7 +1,6 @@
 let dictionary = {};
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let audioElement = new Audio();
-let usageAudioElement = new Audio();
 
 // Debounce function to limit frequent calls
 function debounce(func, delay) {
@@ -27,7 +26,6 @@ async function loadDictionary() {
 // Helper function to toggle button visibility
 function toggleButtons(show) {
     playAudioButton.style.display = show ? "inline" : "none";
-    playUsageAudioButton.style.display = show ? "inline" : "none";
     addFavoriteButton.style.display = show ? "inline" : "none";
 }
 
@@ -40,29 +38,34 @@ function searchWord() {
         return;
     }
 
-    if (!dictionary || Object.keys(dictionary).length === 0) {
+    if (!dictionary.words || Object.keys(dictionary.words).length === 0) {
         console.error("Dictionary is empty or not loaded.");
         return;
     }
 
-    const entry = dictionary[word];
+    const entry = dictionary.words[word];
     if (entry) {
         resultDiv.innerHTML = `
             <strong>Ngas:</strong> ${entry.ngas} <br>
             <i>Phonetic:</i> ${entry.phonetic} <br>
-            <strong>Usage:</strong> "${entry.usage.sentence}" → <i>${entry.usage.translation}</i>
+            <strong>Category:</strong> ${entry.category} <br>
+            <strong>Usage Examples:</strong> <ul>
+                ${entry.usage.map((usage, index) => `
+                    <li>
+                        "${usage.sentence}" → <i>${usage.translation}</i>
+                        <button onclick="playUsageAudio('${usage.audio}')">Play Audio ${index + 1}</button>
+                    </li>
+                `).join("")}
+            </ul>
         `;
 
         toggleButtons(true);
 
-        // Preload audio files
+        // Preload main audio file
         audioElement.src = `audio/${entry.audio}`;
-        audioElement.load().catch(() => console.error("Error loading audio file."));
-        usageAudioElement.src = `audio/${entry.usage.audio}`;
-        usageAudioElement.load().catch(() => console.error("Error loading usage audio file."));
+        audioElement.load().catch(() => console.error("Error loading main audio file."));
 
         playAudioButton.onclick = () => audioElement.play();
-        playUsageAudioButton.onclick = () => usageAudioElement.play();
 
         addFavoriteButton.onclick = () => {
             if (!favorites.includes(word)) {
@@ -75,6 +78,12 @@ function searchWord() {
         resultDiv.textContent = "Word not found.";
         toggleButtons(false);
     }
+}
+
+// Play Audio for Usage Examples
+function playUsageAudio(audioFile) {
+    const audio = new Audio(`audio/${audioFile}`);
+    audio.play().catch(() => console.error("Error playing usage audio."));
 }
 
 // Display Favorite Words
@@ -111,7 +120,7 @@ function showSuggestions() {
         return;
     }
 
-    const matches = Object.keys(dictionary).filter(word => word.startsWith(query));
+    const matches = Object.keys(dictionary.words).filter(word => word.startsWith(query));
 
     if (matches.length > 0) {
         matches.forEach(word => {
@@ -138,7 +147,6 @@ function showSuggestions() {
 const searchBox = document.getElementById("searchBox");
 const resultDiv = document.getElementById("result");
 const playAudioButton = document.getElementById("playAudio");
-const playUsageAudioButton = document.getElementById("playUsageAudio");
 const addFavoriteButton = document.getElementById("addFavorite");
 const suggestionsDiv = document.getElementById("suggestions");
 const favoritesListDiv = document.getElementById("favoritesList");
