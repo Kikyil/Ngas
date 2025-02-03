@@ -1,36 +1,40 @@
-let dictionary = {};
+let dictionary = {
+    "sun": {
+        "ngas": "ta̱m",
+        "phonetic": "/sʌn/",
+        "usage": {
+            "sentence": "The sun is shining.",
+            "translation": "Nyam ta̱m mɛshyé.",
+            "audio": "sun-usage.mp3"
+        },
+        "audio": "sun.mp3"
+    },
+    "water": {
+        "ngas": "mba",
+        "phonetic": "/ˈwɔːtə/",
+        "usage": {
+            "sentence": "The water is cold.",
+            "translation": "Mba meyɛngà.",
+            "audio": "water-usage.mp3"
+        },
+        "audio": "water.mp3"
+    },
+    "house": {
+        "ngas": "gida",
+        "phonetic": "/haʊs/",
+        "usage": {
+            "sentence": "This is my house.",
+            "translation": "Gida ké mbɛtɛy.",
+            "audio": "house-usage.mp3"
+        },
+        "audio": "house.mp3"
+    }
+    // Add more words as necessary
+};
+
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let audioElement = new Audio();
 let usageAudioElement = new Audio();
-
-async function loadDictionary() {
-    const storedData = localStorage.getItem("dictionary");
-    if (storedData) {
-        dictionary = JSON.parse(storedData);
-        console.log("Loaded dictionary from localStorage");
-    } else {
-        try {
-            // Fetch dictionary from GitHub
-            const response = await fetch("https://kikyil.github.io/Ngas/dictionary.json");
-            console.log("Fetch response:", response);  // Debugging the fetch response
-            
-            if (!response.ok) {
-                throw new Error("Failed to fetch dictionary: " + response.statusText);
-            }
-
-            const data = await response.json();
-            console.log("Fetched JSON data:", data);  // Debugging the JSON data
-
-            dictionary = data;
-            localStorage.setItem("dictionary", JSON.stringify(data));  // Store data in localStorage
-        } catch (error) {
-            console.error("Error loading dictionary:", error);
-        }
-    }
-
-    displayFavorites();
-    showSuggestions();
-}
 
 const searchBox = document.getElementById("searchBox");
 const resultDiv = document.getElementById("result");
@@ -148,5 +152,4 @@ document.getElementById("homeBtn").addEventListener("click", () => alert("Home c
 document.getElementById("favoritesBtn").addEventListener("click", () => alert("Favorites clicked!"));
 document.getElementById("contactBtn").addEventListener("click", () => alert("Contact clicked!"));
 
-loadDictionary();
 displayFavorites();
