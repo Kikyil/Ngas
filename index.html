@@ -13,22 +13,36 @@
     </header>
 
     <main>
-        <input type="text" id="searchBox" placeholder="Search for a word..." autocomplete="off">
-        <div id="suggestions"></div>
+        <!-- Loading Indicator -->
+        <div id="loading" style="display: none;">Loading dictionary...</div>
 
+        <!-- Search Box and Clear Button -->
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="Search for a word..." autocomplete="off">
+            <button id="clearSearch" aria-label="Clear search">❌ Clear</button>
+        </div>
+
+        <!-- Suggestions List -->
+        <div id="suggestions" role="listbox"></div>
+
+        <!-- Search Results -->
         <div id="result"></div>
-        <button id="playAudio">🔊 Play Word</button>
-        <button id="playUsageAudio">📢 Play Sentence</button>
-        <button id="addFavorite">⭐ Add to Favorites</button>
 
+        <!-- Action Buttons -->
+        <button id="playAudio" aria-label="Play pronunciation audio">🔊 Play Word</button>
+        <button id="playUsageAudio" aria-label="Play example sentence audio">📢 Play Sentence</button>
+        <button id="addFavorite" aria-label="Add word to favorites">⭐ Add to Favorites</button>
+
+        <!-- Favorites Section -->
         <h2>Favorites</h2>
         <div id="favoritesList"></div>
     </main>
 
+    <!-- Footer Navigation -->
     <footer>
-        <button id="homeBtn">🏠 Home</button>
-        <button id="favoritesBtn">⭐ Favorites</button>
-        <button id="contactBtn">📞 Contact</button>
+        <a href="/" id="homeBtn">🏠 Home</a>
+        <a href="/favorites" id="favoritesBtn">⭐ Favorites</a>
+        <a href="/contact" id="contactBtn">📞 Contact</a>
     </footer>
 
     <script src="script.js"></script>
