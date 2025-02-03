@@ -1,24 +1,48 @@
 {
-    "sun": { 
-        "ngas": "ta̱m", 
-        "phonetic": "/tɑːm/", 
-        "audio": "sun.mp3", 
-        "category": "Nature",
-        "usage": {
-            "sentence": "The sun is shining.",
-            "translation": "Ta̱m a yi.",
-            "audio": "sun_usage.mp3"
-        }
+    "metadata": {
+        "language": "Ngas",
+        "version": "1.0",
+        "author": "Your Name",
+        "description": "A dictionary for the Ngas language with translations, phonetics, and example sentences."
     },
-    "water": { 
-        "ngas": "mba", 
-        "phonetic": "/mbɑː/", 
-        "audio": "water.mp3", 
-        "category": "Nature",
-        "usage": {
-            "sentence": "I need water.",
-            "translation": "M yi mba.",
-            "audio": "water_usage.mp3"
+    "words": {
+        "sun": {
+            "id": 1,
+            "ngas": "ta̱m",
+            "phonetic": "/tɑːm/",
+            "audio": "sun.mp3",
+            "category": "Nature",
+            "usage": [
+                {
+                    "sentence": "The sun is shining.",
+                    "translation": "Ta̱m a yi.",
+                    "audio": "sun_usage.mp3"
+                },
+                {
+                    "sentence": "The sun rises in the east.",
+                    "translation": "Ta̱m a yi kwa̱n.",
+                    "audio": "sun_usage2.mp3"
+                }
+            ]
+        },
+        "water": {
+            "id": 2,
+            "ngas": "mba",
+            "phonetic": "/mbɑː/",
+            "audio": "water.mp3",
+            "category": "Nature",
+            "usage": [
+                {
+                    "sentence": "I need water.",
+                    "translation": "M yi mba.",
+                    "audio": "water_usage.mp3"
+                },
+                {
+                    "sentence": "The water is cold.",
+                    "translation": "Mba a yi ku̱n.",
+                    "audio": "water_usage2.mp3"
+                }
+            ]
         }
     }
 }
