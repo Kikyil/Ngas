@@ -1,3 +1,4 @@
+// Dictionary data (integrated directly into the script)
 let dictionary = {
     "sun": {
         "ngas": "ta̱m",
