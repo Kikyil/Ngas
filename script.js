@@ -1,9 +1,21 @@
-// Initialize an empty dictionary
 let dictionary = {};
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let audioElement = new Audio();
 let usageAudioElement = new Audio();
 
+// Load dictionary from GitHub JSON
+async function loadDictionary() {
+    try {
+        const response = await fetch("https://kikyil.github.io/Ngas/dictionary.json");
+        dictionary = await response.json();
+        localStorage.setItem("dictionary", JSON.stringify(dictionary));
+        console.log("Dictionary loaded successfully.");
+    } catch (error) {
+        console.error("Error loading dictionary:", error);
+    }
+}
+
+// UI Elements
 const searchBox = document.getElementById("searchBox");
 const resultDiv = document.getElementById("result");
 const playAudioButton = document.getElementById("playAudio");
@@ -12,26 +24,11 @@ const addFavoriteButton = document.getElementById("addFavorite");
 const suggestionsDiv = document.getElementById("suggestions");
 const favoritesListDiv = document.getElementById("favoritesList");
 
-// Fetch dictionary from URL
-async function loadDictionary() {
-    try {
-        const response = await fetch("https://kikyil.github.io/Ngas/dictionary.json");
-        const data = await response.json();
-        
-        console.log("Dictionary loaded:", data); // Debugging log
-        
-        dictionary = data;
-        localStorage.setItem("dictionary", JSON.stringify(data));
-    } catch (error) {
-        console.error("Error loading dictionary:", error);
-    }
-}
-
-// Search word function
+// Search Word
 function searchWord() {
     const word = searchBox.value.trim().toLowerCase();
     if (!word) {
-        resultDiv.textContent = "";
+        resultDiv.innerHTML = "";
         playAudioButton.style.display = "none";
         playUsageAudioButton.style.display = "none";
         addFavoriteButton.style.display = "none";
@@ -49,10 +46,6 @@ function searchWord() {
         playAudioButton.style.display = "inline";
         playUsageAudioButton.style.display = "inline";
         addFavoriteButton.style.display = "inline";
-
-        // Debugging audio paths
-        console.log("Audio Path (Word Audio):", `audio/${entry.audio}`);
-        console.log("Audio Path (Usage Audio):", `audio/${entry.usage.audio}`);
 
         playAudioButton.onclick = () => {
             audioElement.src = `audio/${entry.audio}`;
@@ -81,7 +74,7 @@ function searchWord() {
     }
 }
 
-// Display favorites
+// Display Favorite Words
 function displayFavorites() {
     favoritesListDiv.innerHTML = "";
     favorites.forEach(word => {
@@ -105,17 +98,19 @@ function displayFavorites() {
     });
 }
 
-// Show suggestions as user types
+// Auto-Suggest Words While Typing
 function showSuggestions() {
     const query = searchBox.value.toLowerCase();
     suggestionsDiv.innerHTML = "";
+
     if (!query) {
         suggestionsDiv.style.display = "none";
         return;
     }
 
     const matches = Object.keys(dictionary).filter(word => word.startsWith(query));
-    if (matches.length) {
+
+    if (matches.length > 0) {
         matches.forEach(word => {
             const suggestionItem = document.createElement("div");
             suggestionItem.textContent = word;
@@ -127,22 +122,24 @@ function showSuggestions() {
             };
             suggestionsDiv.appendChild(suggestionItem);
         });
+
         suggestionsDiv.style.display = "block";
     } else {
         suggestionsDiv.style.display = "none";
     }
 }
 
-// Event listeners for input field and buttons
+// Attach Event Listeners
 searchBox.addEventListener("input", () => {
     searchWord();
     showSuggestions();
 });
 
+// Footer Navigation
 document.getElementById("homeBtn").addEventListener("click", () => alert("Home clicked!"));
 document.getElementById("favoritesBtn").addEventListener("click", () => alert("Favorites clicked!"));
 document.getElementById("contactBtn").addEventListener("click", () => alert("Contact clicked!"));
 
-// Load dictionary and display favorites
+// Initialize
 loadDictionary();
 displayFavorites();
