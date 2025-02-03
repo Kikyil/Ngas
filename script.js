@@ -8,7 +8,7 @@ async function loadDictionary() {
     if (storedData) {
         dictionary = JSON.parse(storedData);
     } else {
-        fetch("dictionary.json")
+        fetch("dictionary.js")
             .then(response => response.json())
             .then(data => {
                 dictionary = data;
