@@ -8,7 +8,7 @@ async function loadDictionary() {
     if (storedData) {
         dictionary = JSON.parse(storedData);
     } else {
-        fetch("dictionary.js")
+        fetch("https://kikyil.github.io/Ngas/dictionary.json") // Use the URL of your external JSON file
             .then(response => response.json())
             .then(data => {
                 dictionary = data;
@@ -134,5 +134,5 @@ document.getElementById("homeBtn").addEventListener("click", () => alert("Home c
 document.getElementById("favoritesBtn").addEventListener("click", () => alert("Favorites clicked!"));
 document.getElementById("contactBtn").addEventListener("click", () => alert("Contact clicked!"));
 
-loadDictionary();
-displayFavorites();
+loadDictionary(); // Load the dictionary data
+displayFavorites(); // Display the list of favorites on page load
